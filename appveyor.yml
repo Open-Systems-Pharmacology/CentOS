@@ -1,0 +1,27 @@
+image: 
+- Visual Studio 2019
+
+environment:
+  major: 9
+  minor: 0
+  release: 0
+  app_version: "$(major).$(minor).$(release).$(APPVEYOR_BUILD_NUMBER)"
+
+version: "$(major).$(minor).$(release).{build}"
+
+after_build:
+  - ps: Get-ChildItem .\*.nupkg | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+
+skip_branch_with_pr: true
+
+skip_tags: true
+
+skip_commits:
+  files:
+    - "*.md"
+
+pull_requests:
+  do_not_increment_build_number: true
+
+nuget:
+  disable_publish_on_pr: true
